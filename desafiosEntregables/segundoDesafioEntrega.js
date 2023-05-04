@@ -5,13 +5,14 @@ const path = "./products.json";
 export default class ProductManager {
     constructor(filePath) {
         this.path = filePath;
+        
         this.products = [];
         this.nextId = 1;
     }
 
     initialize = async() => {
         try {
-            const data = await fs.promises.readFile(path, 'utf-8');
+            const data = await fs.promises.readFile(filePath, 'utf-8');
             console.log(data);
             this.products = JSON.parse(data);
             if (this.products.length > 0) {
