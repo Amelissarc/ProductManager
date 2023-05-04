@@ -1,6 +1,11 @@
+//CREAR CLASE QUE PERMITA GESTIONAR USUARIOS USANDO FS.PROMISES
+//El manager debe vivir en una clase, en un archivo externo llamado managerUsuarios.js
+//El método "crearUsuario" debe recibir un objeto con los campos ( Nombre, Apellido, Edad, Curso)
+//El método debe guardar en un archivo "usuarios.json", deben guardarlos dentro de un arreglo, ya que se trabajaran con múltiples usuarios
+//El método "consultarUsuarios" debe poder leer un archivo usuarios.json y devolver el arreglo correspondiente a esos usuarios
 import fs from 'fs';
 
-const path = './files/usuarios.json' 
+const path = "./files/usuarios.json"; 
 
 export default  class ManagerUsuarios {
     consultarUsuarios = async() => {
