@@ -5,7 +5,7 @@ const path = "./products.json";
 export default class ProductManager {
     constructor(filePath) {
         this.path = filePath;
-        
+
         this.products = [];
         this.nextId = 1;
     }
@@ -82,7 +82,7 @@ export default class ProductManager {
 
     async saveToFile() {
         try {
-            const data = JSON.stringify(path, null, '\t');
+            const data = JSON.stringify(filePath, null, '\t');
             await fs.promises.writeFile(this.path, data);
         } catch (err) {
             console.log('Error al guardar en archivo:', err);
