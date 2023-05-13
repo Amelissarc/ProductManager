@@ -1,5 +1,7 @@
 import fs from 'fs';
 
+const path = 'src/files/products.json';
+
 export default class ProductManager {
   constructor(filePath) {
     this.path = filePath;

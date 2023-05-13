@@ -7,16 +7,13 @@ const port = 8080;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const productManager = new ProductManager('./products.json');
+const productManager = new ProductManager();
 
 // Inicializar ProductManager y cargar los productos desde el archivo
 productManager.initialize().then(() => {
-  console.log('ProductManager inicializado.');
-
-  // Definir ruta para obtener todos los productos
-  app.get('/', (req, res) => {
-    const allProducts = productManager.getProducts();
-    res.send(allProducts);
+  app.get('/products', async (req, res) => {
+    const products = await productManager.getProducts();
+    res.send(products);
   });
 
   // Definir ruta para filtrar productos por precio
