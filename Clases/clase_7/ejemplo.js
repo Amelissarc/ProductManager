@@ -1,0 +1,1 @@
+application.get('/usuarios')
