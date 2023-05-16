@@ -47,3 +47,15 @@ productManager.initialize().then(() => {
 }).catch(error => {
   console.log('Error al inicializar ProductManager:', error);
 });
+
+// Middleware para capturar errores no controlados
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).send('Ha ocurrido un error en el servidor');
+});
+
+productManager.initialize().then(() => {
+  // Resto del código
+}).catch(error => {
+  console.log('Error al inicializar ProductManager:', error);
+});  
