@@ -5,8 +5,8 @@ import cartsRouter  from './routes/carts.js';
 const app = express();
 const port = 8080;
 
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const productManager = new ProductManager('./files/productos.json');
 
@@ -22,13 +22,13 @@ app.use(async (req, res, next) => {
 });
 
 // Obtener todos los productos
-app.get('/products', (req, res) => {
+app.get('/api/products', (req, res) => {
   const products = productManager.getProducts();
   res.send({products});
 });
 
 // Filtrar productos por precio
-app.get('/price', (req, res) => {
+app.get('/filter', (req, res) => {
   const price = req.query.price;
 
   if (!price || (price !== '75' && price !== '25')) {
@@ -42,7 +42,7 @@ app.get('/price', (req, res) => {
 
 // Obtener producto por ID
 app.get('/product/:pid', (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.pid);
 
   const product = productManager.getProductById(id);
 
@@ -62,7 +62,7 @@ app.post('/product', (req, res) => {
 
 // Actualizar un producto existente
 app.put('/product/:pid', (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.pid);
   const newProduct = req.body;
   productManager.updateProduct(id, newProduct);
   res.send('Producto actualizado exitosamente');
@@ -70,13 +70,13 @@ app.put('/product/:pid', (req, res) => {
 
 // Eliminar un producto
 app.delete('/product/:pid', (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.pid);
   productManager.deleteProduct(id);
   res.send('Producto eliminado exitosamente');
 });
 
 // Utilizar el enrutador de carritos
-app.use('/carts', cartsRouter);
+app.use('/api/carts', cartsRouter);
 
 app.listen(port, () => {
   console.log(`El servidor está en marcha y funcionando en el puerto ${port}`);
@@ -85,7 +85,7 @@ app.listen(port, () => {
 
 /* nodemon app.js
 
-Obtener todos los productos: GET /products
+Obtener todos los productos: GET /api/products
 Filtrar productos por precio: GET /filter?price=precio
 Obtener un producto por ID: GET /product/pid
 Agregar un nuevo producto: POST /product

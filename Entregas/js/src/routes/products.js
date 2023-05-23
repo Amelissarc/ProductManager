@@ -1,5 +1,8 @@
+import { Router } from 'express';
 import fs from 'fs';
 
+const router = Router();
+const products = [];
 const path = './files/productos.json';
 
 export default class ProductManager {
@@ -31,6 +34,8 @@ initialize = async () => {
       !product.category ||
       !product.thumbnail ||
       !product.code ||
+      !product.status ||
+      !product.id ||
       !product.stock
     ) {
       console.log('Error: todos los campos son obligatorios');
@@ -88,3 +93,5 @@ initialize = async () => {
     }
   }
 }
+
+
