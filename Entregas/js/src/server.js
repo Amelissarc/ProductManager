@@ -24,11 +24,11 @@ app.use(async (req, res, next) => {
 // Obtener todos los productos
 app.get('/products', (req, res) => {
   const products = productManager.getProducts();
-  res.send(products);
+  res.send({products});
 });
 
 // Filtrar productos por precio
-app.get('/filter', (req, res) => {
+app.get('/price', (req, res) => {
   const price = req.query.price;
 
   if (!price || (price !== '75' && price !== '25')) {
@@ -41,7 +41,7 @@ app.get('/filter', (req, res) => {
 });
 
 // Obtener producto por ID
-app.get('/product/:id', (req, res) => {
+app.get('/product/:pid', (req, res) => {
   const id = parseInt(req.params.id);
 
   const product = productManager.getProductById(id);
@@ -61,7 +61,7 @@ app.post('/product', (req, res) => {
 });
 
 // Actualizar un producto existente
-app.put('/product/:id', (req, res) => {
+app.put('/product/:pid', (req, res) => {
   const id = parseInt(req.params.id);
   const newProduct = req.body;
   productManager.updateProduct(id, newProduct);
@@ -69,7 +69,7 @@ app.put('/product/:id', (req, res) => {
 });
 
 // Eliminar un producto
-app.delete('/product/:id', (req, res) => {
+app.delete('/product/:pid', (req, res) => {
   const id = parseInt(req.params.id);
   productManager.deleteProduct(id);
   res.send('Producto eliminado exitosamente');
@@ -87,9 +87,9 @@ app.listen(port, () => {
 
 Obtener todos los productos: GET /products
 Filtrar productos por precio: GET /filter?price=precio
-Obtener un producto por ID: GET /product/id
+Obtener un producto por ID: GET /product/pid
 Agregar un nuevo producto: POST /product
-Actualizar un producto existente: PUT /product/id
-Eliminar un producto: DELETE /product/id
+Actualizar un producto existente: PUT /product/pid
+Eliminar un producto: DELETE /product/pid
 
 */
