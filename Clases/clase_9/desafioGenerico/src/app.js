@@ -2,7 +2,6 @@ import express from 'express';
 import handlebard from 'express-handlebars';
 import __dirname from './utils.js';
 
-
 const app = express();
 
 app.engine('handlebars', handlebard.engine());
