@@ -1,20 +1,27 @@
-import { Router } from "express";
+import { Router } from 'express';
 import fs from 'fs';
-import ManagerProducts from "../clasess/ProductsManager.class.js";
+import path from 'path';
+import ManagerProducts from '../clasess/ProductsManager.class.js';
+import { fileURLToPath } from 'url';
 
 const router = Router();
-const filePath = '../clasess/files/products.json';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const filePath = path.join(__dirname, '../classes/files/products.json');
 const managerProducts = new ManagerProducts(filePath);
 
 // Middleware para inicializar managerProducts antes de procesar las solicitudes
+
 router.use(async (req, res, next) => {
   try {
     await managerProducts.initialize();
-    next();
+    next()
   } catch (error) {
     console.log('Error al inicializar managerProducts:', error);
     res.status(500).send('Error al inicializar managerProducts');
   }
+
 });
 
 // Obtener todos los productos

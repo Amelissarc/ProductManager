@@ -1,21 +1,33 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import { v4 as uuidV4 } from 'uuid';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
-const filePath = './files/products.json';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const filePath = path.join(__dirname, './files/products.json');
+
+
 
 export default class ManagerProducts {
+
   constructor() {
     this.path = filePath;
     this.products = [];
   }
 
+
+
   async initialize() {
     try {
-      const data = await fs.promises.readFile(this.path, 'utf-8');
+      const data = await fs.readFile(this.path, 'utf-8');
       this.products = JSON.parse(data);
     } catch (err) {
       console.log('Error al leer el archivo:', err);
     }
+
   }
 
   addProduct(product) {
