@@ -28,22 +28,23 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     await managerCarts.crearCart();
-    res.send({ status: "success" });
+    const response = { status: "success" };
+    res.send(response);
   } catch (error) {
     console.log("Error al crear el carrito:", error);
     res.status(500).send("Error al crear el carrito");
   }
 });
 
-router.post("/:cid/products/:pid", async (req, res) => {
+router.post("/:cid/products/:pid", async ({ params }, res) => {
   try {
-    const cartId = req.params.cid;
-    const productId = req.params.pid;
+    const { cid, pid } = params;
 
-    await managerCarts.agregarProductoEnCarrito(cartId, productId);
-    res.send({ status: "success" });
+    await managerCarts.agregarProductoEnCarrito(cid, pid);
+    const response = { status: "success" };
+    res.send(response);
   } catch (error) {
-    console.log("Error al agregar producto en el carrito:", error);
+    console.log("Error al agregar producto en el carrito", error);
     res.status(500).send("Error al agregar producto en el carrito");
   }
 });

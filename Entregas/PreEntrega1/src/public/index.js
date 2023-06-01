@@ -2,7 +2,7 @@ const socket = io();
 
 const table = document.getElementById('table');
 
-function createChild(product) {
+const createChild = (product) => {
   const html = `
                 <td>${product.title}</td>
                 <td>${product.description}</td>
@@ -14,26 +14,22 @@ function createChild(product) {
   // Actualizar el HTML de la página
   const newElement = document.createElement('tr');
   newElement.id = product.id;
-
   newElement.innerHTML = html;
   table.appendChild(newElement);
 }
 
-function deleteChild(productId) {
+const deleteChild = (productId) => {
   const child = document.getElementById(productId);
 
   if (!child) {
-    return;
+    table.removeChild(child);
   }
-
-  table.removeChild(child);
 }
 
-function updateProducts(products) {
-  const table = document.getElementById('table');
+const updateProducts = (products) => {
   table.innerHTML = "";
 
-  Array.from(products).forEach((product) => createChild(product));
+  products.forEach((product) => createChild(product));
 }
 
 socket.on('connect', () => {
