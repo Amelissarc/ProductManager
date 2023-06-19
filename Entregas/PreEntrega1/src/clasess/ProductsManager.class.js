@@ -3,22 +3,15 @@ import { v4 as uuidV4 } from 'uuid';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
-
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const filePath = path.join(__dirname, './files/products.json');
-
-
-
 export default class ManagerProducts {
 
   constructor() {
     this.path = filePath;
     this.products = [];
   }
-
-
 
   async initialize() {
     try {
