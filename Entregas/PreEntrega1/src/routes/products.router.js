@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import ManagerProducts from '../clasess/ProductsManager.class.js';
+import ManagerProducts from '../daos/filesystem/ProductsManager.class.js';
 
 const router = Router();
 const __filename = fileURLToPath(import.meta.url);
