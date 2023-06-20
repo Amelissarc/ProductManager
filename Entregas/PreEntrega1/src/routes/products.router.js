@@ -1,25 +1,28 @@
 import { Router } from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import ManagerProducts from '../daos/filesystem/ProductsManager.class.js';
+import ManagerProducts from '../daos/mongodb/ProductsManager.class.js';
 
 const router = Router();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const filePath = path.join(__dirname, '../classes/files/products.json');
-const managerProducts = new ManagerProducts(filePath);
+const managerProducts = new ManagerProducts();
 
 // Middleware para inicializar managerProducts antes de procesar las solicitudes
-
 router.use(async (req, res, next) => {
   try {
     await managerProducts.initialize();
-    next()
+    next();
   } catch (error) {
     console.log('Error al inicializar managerProducts:', error);
     res.status(500).send('Error al inicializar managerProducts');
   }
+});
 
+router.get('/', async (req, res) => {
+  try {
+    const products = await managerProducts.getProducts();
+    res.render('products', { products });
+  } catch (error) {
+    console.log('Error al obtener todos los productos:', error);
+    res.status(500).send('Error al obtener todos los productos');
+  }
 });
 
 // Obtener todos los productos
@@ -34,9 +37,9 @@ router.get('/api/products', (req, res) => {
 });
 
 // Filtrar productos por precio
-router.get('/filter', ({ query }, res) => {
+router.get('/filter', (req, res) => {
   try {
-    const { price } = query;
+    const { price } = req.query;
 
     if (!price || (price !== '75' && price !== '25')) {
       const products = managerProducts.getProducts();
@@ -52,7 +55,6 @@ router.get('/filter', ({ query }, res) => {
     res.status(500).send('Error al filtrar productos por precio');
   }
 });
-
 
 // Obtener producto por ID
 router.get('/product/:pid', (req, res) => {
@@ -109,5 +111,7 @@ router.delete('/product/:pid', (req, res) => {
 });
 
 export default router;
+
+
 
 
