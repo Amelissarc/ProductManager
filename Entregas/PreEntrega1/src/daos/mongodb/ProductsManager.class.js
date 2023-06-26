@@ -1,9 +1,13 @@
 import mongoose from 'mongoose'
 import { productsModel } from './models/products.model.js'
+
+// Definición del modelo de productos
 export default class ManagerProducts {
   connection = mongoose.connect(
     'mongodb+srv://melissarinconft:BngzW3dc32sVJniM@cluster0.lv4zutu.mongodb.net/?retryWrites=true&w=majority'
   )
+  .then(() => console.log('Conexión exitosa a MongoDB Atlas'))
+  .catch((err) => console.error('Error al conectarse a MongoDB Atlas:', err));
 
   async addProduct(product) {
     try {

@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { json, urlencoded } from 'express';
 import exphbs from 'express-handlebars';
 import { Server } from 'socket.io';
 import routerProducts from './routes/products.router.js';
@@ -24,8 +24,8 @@ app.set('view engine', 'handlebars');
 
 // routers
 app.use("/", routerViews);
-app.use("/products", routerProducts);
-app.use("/carts", routerCart);
+app.use("/api/products", routerProducts);
+app.use("/api/carts", routerCart);
 
 // server start and socket io
 const server = app.listen(8080, () => console.log("Servidor levantado"))
@@ -51,3 +51,4 @@ socketServer.on("connection", async (socket) => {
   })
 });
 
+export default socketServer;
