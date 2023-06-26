@@ -1,58 +1,66 @@
 const socket = io();
 
-const table = document.getElementById('table');
+let addProductBtn = document.getElementById("add-product-btn")
 
-const createChild = (product) => {
-  const html = `
-                <td>${product.title}</td>
-                <td>${product.description}</td>
-                <td>$${product.price}</td>
-                <td>${product.category}</td>
-                <td>${product.stock} unidades</td>
-              `
+// Socket.on
 
-  // Actualizar el HTML de la página
-  const newElement = document.createElement('tr');
-  newElement.id = product.id;
-  newElement.innerHTML = html;
-  table.appendChild(newElement);
-}
+socket.on("update-products", (products) => {
+  let productsContainer = document.getElementById("products-container")
+  productsContainer.innerHTML = ""
 
-const deleteChild = (productId) => {
-  const child = document.getElementById(productId);
+  for (let product of products) {
+    let productElement = document.createElement("div");
+    productElement.innerHTML = `
+      <p> Title: ${product.title} </p>
+      <p> Description: ${product.description} </p>
+      <p> Price: ${product.price} </p>
+      <button id=${product.id} onclick="deleteProduct(this)"> Borrar </button>
+    `
 
-  if (!child) {
-    table.removeChild(child);
+    productElement.setAttribute("style", "border: 1px solid #000; border-radius: 1rem; padding: 1rem; margin-bottom: 1rem")
+    productsContainer.appendChild(productElement)
   }
-}
 
-const updateProducts = (products) => {
-  table.innerHTML = "";
+})
 
-  products.forEach((product) => createChild(product));
-}
+// Event listeners
 
-socket.on('connect', () => {
-  console.log('Conectado al servidor de socket.io');
-});
+addProductBtn.addEventListener("click", (e) => {
+  e.preventDefault()
 
-socket.on("newProduct", (product) => {
-  createChild(product);
-});
+  // Obtenemos los inputs
 
-socket.on("deleteProduct", (productId) => {
-  deleteChild(productId);
-});
+  let titleInput = document.getElementById("title")
+  let descriptionInput = document.getElementById("description")
+  let priceInput = document.getElementById("price")
+  let codeInput = document.getElementById("code")
+  let stockInput = document.getElementById("stock")
+  let categoryInput = document.getElementById("category")
+  let statusInput = document.getElementById("status")
 
-socket.on('initProduct', (products) => {
-  updateProducts(products);
-});
+  // Creamos la "data" del producto a partir de los valores de los inputs, y la enviamos
 
-socket.on("updateProduct", (product) => {
-  deleteChild(product.id);
-  createChild(product);
-});
+  let productData = {
+    title: titleInput.value,
+    description: descriptionInput.value,
+    price: Number(priceInput.value),
+    code: Number(codeInput.value),
+    stock: Number(stockInput.value),
+    category: categoryInput.value,
+    status: (statusInput.value.toLowerCase() === "true")
+  }
 
-socket.on('disconnect', () => {
-  console.log('Desconectado del servidor de socket.io');
-});
+  socket.emit("add-product", productData)
+
+  // "Limpiamos" los inputs
+
+  titleInput.value = ""
+  descriptionInput.value = ""
+  priceInput.value = ""
+  codeInput.value = ""
+  stockInput.value = ""
+  categoryInput.value = ""
+  statusInput.value = ""
+
+})
+

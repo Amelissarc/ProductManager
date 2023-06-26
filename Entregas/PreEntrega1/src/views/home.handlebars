@@ -1,24 +1,8 @@
-<div class="container">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Price</th>
-        <th>Category</th>
-        <th>Stock</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each products}}
-        <tr>
-          <td>{{title}}</td>
-          <td>{{description}}</td>
-          <td>${{price}}</td>
-          <td>{{category}}</td>
-          <td>{{stock}} unidades</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
+<h1>Productos: </h1>
+{{#each products}}
+  <div style="border: 1px solid #000; border-radius: 1rem; padding: 1rem; margin-bottom: 1rem">
+    <p> Title: {{this.title}} </p>
+    <p> Description: {{this.description}} </p>
+    <p> Price: {{this.price}} </p>
+  </div>
+{{/each}}

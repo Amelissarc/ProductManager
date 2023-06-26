@@ -1,40 +1,34 @@
 import { Router } from 'express';
 import ManagerProducts from '../daos/mongodb/ProductsManager.class.js';
+import __dirname from "../utils.js";
 
 const router = Router();
-const managerProducts = new ManagerProducts();
 
-// Middleware para inicializar managerProducts antes de procesar las solicitudes
-router.use(async (req, res, next) => {
-  try {
-    await managerProducts.initialize();
-    next();
-  } catch (error) {
-    console.log('Error al inicializar managerProducts:', error);
-    res.status(500).send('Error al inicializar managerProducts');
-  }
-});
+let managerProducts = new ManagerProducts();
 
 router.get('/', async (req, res) => {
   try {
-    const products = await managerProducts.getProducts();
-    res.render('products', { products });
-  } catch (error) {
-    console.log('Error al obtener todos los productos:', error);
-    res.status(500).send('Error al obtener todos los productos');
-  }
-});
+    let limit = Number(req.query.limit);
+    let page = Number(req.query.page);
+    let sort = Number(req.query.sort);
+    let filtro = req.query.filtro;
+    let filtroValor = req.query.filtroValor;
 
-// Obtener todos los productos
-router.get('/api/products', (req, res) => {
-  try {
-    const products = managerProducts.getProducts();
+    const products = await managerProducts.getProducts(
+      limit, 
+      page, 
+      sort, 
+      filtro, 
+      filtroValor
+    );
     res.send({ products });
   } catch (error) {
     console.log('Error al obtener todos los productos:', error);
     res.status(500).send('Error al obtener todos los productos');
   }
 });
+
+
 
 // Filtrar productos por precio
 router.get('/filter', (req, res) => {
@@ -57,57 +51,46 @@ router.get('/filter', (req, res) => {
 });
 
 // Obtener producto por ID
-router.get('/product/:pid', (req, res) => {
-  try {
-    const id = parseInt(req.params.pid);
-    const product = managerProducts.getProductById(id);
+router.get("/:pid", async (req, res) => {
+  let id = req.params.pid;
 
-    if (!product) {
-      return res.status(404).send('Producto no encontrado');
-    }
+  let product = await managerProducts.getProductById(id);
 
-    res.send(product);
-  } catch (error) {
-    console.log('Error al obtener producto por ID:', error);
-    res.status(500).send('Error al obtener producto por ID');
+  if (!product) {
+    res.send("No se encontró el producto");
+    return;
   }
+
+  res.send(product); // Se envian los productos en forma de objeto como pide la consigna
 });
 
 // Agregar un nuevo producto
-router.post('/product', (req, res) => {
-  try {
-    const product = req.body;
-    managerProducts.addProduct(product);
-    res.send('Producto agregado exitosamente');
-  } catch (error) {
-    console.log('Error al agregar un nuevo producto:', error);
-    res.status(500).send('Error al agregar un nuevo producto');
-  }
+router.post("/", async (req, res) => {
+  let newProduct = req.body;
+
+  await managerProducts.addProduct(newProduct);
+  const products = await managerProducts.getProducts();
+  req.socketServer.sockets.emit("update-products", products);
+  res.send({ status: "success" });
 });
 
 // Actualizar un producto existente
-router.put('/product/:pid', (req, res) => {
-  try {
-    const id = parseInt(req.params.pid);
-    const newProduct = req.body;
-    managerProducts.updateProduct(id, newProduct);
-    res.send('Producto actualizado exitosamente');
-  } catch (error) {
-    console.log('Error al actualizar un producto existente:', error);
-    res.status(500).send('Error al actualizar un producto existente');
-  }
+router.put("/:pid", async (req, res) => {
+  let id = req.params.pid;
+  let newProduct = req.body;
+
+  await managerProducts.updateProduct(id, newProduct);
+
+  res.send({ status: "success" });
 });
 
 // Eliminar un producto
-router.delete('/product/:pid', (req, res) => {
-  try {
-    const id = parseInt(req.params.pid);
-    managerProducts.deleteProduct(id);
-    res.send('Producto eliminado exitosamente');
-  } catch (error) {
-    console.log('Error al eliminar un producto:', error);
-    res.status(500).send('Error al eliminar un producto');
-  }
+router.delete("/:pid", async (req, res) => {
+  let id = req.params.pid;
+
+  await managerProducts.deleteProduct(id);
+
+  res.send({ status: "success" });
 });
 
 export default router;

@@ -3,51 +3,62 @@ import ManagerCarts from "../daos/mongodb/CartManager.class.js";
 import __dirname from '../utils.js';
 
 const router = Router();
-const managerCarts = new ManagerCarts();
 
-router.get("/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const cart = await managerCarts.consultarCartPorId(id);
-    res.send(cart);
-  } catch (error) {
-    console.log("Error al obtener el carrito por ID:", error);
-    res.status(500).send("Error al obtener el carrito por ID");
+let managerCarts = new ManagerCarts();
+
+
+router.get("/:cid", async (req, res) => {
+  let id = req.params.cid;
+
+  let cart = await managerCarts.getCartById(id);
+
+  if (!cart) {
+    res.send("No se encontró el carrito");
+    return;
   }
+
+  res.send(cart);
 });
 
 router.get("/", async (req, res) => {
-  try {
-    const carts = await managerCarts.consultarCarts();
-    res.send(carts);
-  } catch (error) {
-    console.log("Error al obtener los carritos:", error);
-    res.status(500).send("Error al obtener los carritos");
+  let carts = await managerCarts.getAllCarts();
+
+  if (!carts) {
+    res.send("No se encontró el carrito");
+    return;
   }
+
+  res.send(carts);
 });
 
 router.post("/", async (req, res) => {
-  try {
-    await managerCarts.crearCart();
-    const response = { status: "success" };
-    res.send(response);
-  } catch (error) {
-    console.log("Error al crear el carrito:", error);
-    res.status(500).send("Error al crear el carrito");
-  }
+  await managerCarts.createCart();
+
+  res.send({ status: "success" });
 });
 
-router.post("/:cid/products/:pid", async ({ params }, res) => {
-  try {
-    const { cid, pid } = params;
+router.post("/:cid/product/:pid", async (req, res) => {
+  let cartId = req.params.cid;
+  let productId = req.params.pid;
 
-    await managerCarts.agregarProductoEnCarrito(cid, pid);
-    const response = { status: "success" };
-    res.send(response);
-  } catch (error) {
-    console.log("Error al agregar producto en el carrito", error);
-    res.status(500).send("Error al agregar producto en el carrito");
-  }
+  await managerCarts.addProductToCart(cartId, productId);
+
+  res.send({ status: "success" });
+});
+
+router.delete("/:cid/product/:pid", async (req, res) => {
+  let cartId = req.params.cid;
+  let productId = req.params.pid;
+
+  await managerCarts.deleteProductFromCart(cartId, productId);
+
+  res.send({ status: "success" });
+});
+
+router.delete("/:cid", async (req, res) => {
+  let cartId = req.params.cid;
+  await managerCarts.deleteAllProductsFromCart(cartId);
+  res.send({ status: "success" });
 });
 
 export default router;
