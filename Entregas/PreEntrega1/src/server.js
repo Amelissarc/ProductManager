@@ -1,7 +1,6 @@
 import express from 'express';
 import exphbs from 'express-handlebars';
 import { Server } from 'socket.io';
-
 import routerProducts from './routes/products.router.js';
 import routerCart from './routes/carts.router.js';
 import routerViews from './routes/views.router.js';
@@ -17,9 +16,6 @@ app.use(express.urlencoded({ extended: true }));
 // static
 app.use(express.static(__dirname + "/public"));
 
-app.use('/', routerProducts);
-app.use('/', routerCart);
-
 // Configurar Handlebars
 const hbs = exphbs.create();
 app.engine('handlebars', hbs.engine);
@@ -29,7 +25,6 @@ app.set('view engine', 'handlebars');
 // routers
 
 app.use("/", routerViews);
-
 app.use("/products", routerProducts);
 app.use("/carts", routerCart);
 
@@ -57,12 +52,3 @@ socketServer.on("connection", async (socket) => {
   })
 });
 
-
-/* nodemon app.js
-Obtener todos los productos: GET /api/products
-Filtrar productos por precio: GET /filter?price=precio
-Obtener un producto por ID: GET /product/pid
-Agregar un nuevo producto: POST /product
-Actualizar un producto existente: PUT /product/pid
-Eliminar un producto: DELETE /product/pid
-*/
