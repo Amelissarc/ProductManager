@@ -11,7 +11,7 @@ socket.on("update-products", (products) => {
   for (let product of products) {
     let productElement = document.createElement("div");
     productElement.innerHTML = `
-      <p> Title: ${product.title} </p>
+      <p> Title: ${product.title}</p>
       <p> Description: ${product.description} </p>
       <p> Price: ${product.price} </p>
       <button id=${product.id} onclick="deleteProduct(this)"> Borrar </button>

@@ -23,7 +23,6 @@ app.set("views", __dirname + "/views");
 app.set('view engine', 'handlebars');
 
 // routers
-
 app.use("/", routerViews);
 app.use("/products", routerProducts);
 app.use("/carts", routerCart);

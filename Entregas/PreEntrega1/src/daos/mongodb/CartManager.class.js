@@ -7,6 +7,7 @@ export default class ManagerCarts {
   )
 
   managerProducts = new ManagerProducts();
+  
   async createCart() {
     const result = await cartModel.create({ products: [] });
     return result;
