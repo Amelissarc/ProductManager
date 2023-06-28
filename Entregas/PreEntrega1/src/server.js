@@ -8,6 +8,7 @@ import __dirname from './utils.js'
 import ManagerProducts from './daos/mongodb/ProductsManager.class.js';
 
 const app = express();
+const managerProducts = new ManagerProducts();
 const port = 8080;
 
 app.use(express.json());
@@ -23,9 +24,13 @@ app.set("views", __dirname + "/views");
 app.set('view engine', 'handlebars');
 
 // routers
-app.use("/", routerViews);
-app.use("/api/products", routerProducts);
-app.use("/api/carts", routerCart);
+app.use("/products", routerProducts);
+app.use("/carts", routerCart);
+
+const products =  managerProducts.getProducts();
+app.get('/', (req, res) => {
+    res.render('home', {products})
+})
 
 // server start and socket io
 const server = app.listen(8080, () => console.log("Servidor levantado"))
