@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { productsModel } from './models/products.model.js'
 
-// Definición del modelo de productos
+// Definición del modelo de productos BngzW3dc32sVJniM
 export default class ManagerProducts {
   connection = mongoose.connect(
     'mongodb+srv://melissarinconft:BngzW3dc32sVJniM@cluster0.lv4zutu.mongodb.net/?retryWrites=true&w=majority'

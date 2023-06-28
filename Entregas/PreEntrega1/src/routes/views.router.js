@@ -7,15 +7,9 @@ let managerProducts = new ManagerProducts()
 
 const router = Router();
 
-router.get('/', async (req,res)=>{
-  let products = await managerProducts.getProducts();
-  res.render('home', {
-    title: "Inicio",
-    products: products
-  });
-})
+router.get('/', (req,res)=>{
 
-router.get('/realtimeproducts', async (req,res)=>{
+
   res.render('realTimeProducts');
 })
 

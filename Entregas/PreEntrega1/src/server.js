@@ -49,6 +49,7 @@ socketServer.on("connection", async (socket) => {
     await managerProducts.deleteProduct(productID)
     socketServer.emit("update-products", await managerProducts.getProducts())
   })
+  app.use('/realtimeproducts/', routerRealTimeProducts)
 });
 
 export default socketServer;

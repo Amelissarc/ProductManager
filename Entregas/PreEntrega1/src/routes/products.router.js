@@ -28,28 +28,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-
-
-// Filtrar productos por precio
-router.get('/filter', (req, res) => {
-  try {
-    const { price } = req.query;
-
-    if (!price || (price !== '75' && price !== '25')) {
-      const products = managerProducts.getProducts();
-      res.send({ products });
-    } else {
-      const priceFilter = managerProducts.getProducts().filter(
-        (product) => product.price === parseFloat(price)
-      );
-      res.send(priceFilter);
-    }
-  } catch (error) {
-    console.log('Error al filtrar productos por precio:', error);
-    res.status(500).send('Error al filtrar productos por precio');
-  }
-});
-
 // Obtener producto por ID
 router.get("/:pid", async (req, res) => {
   let id = req.params.pid;
