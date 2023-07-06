@@ -9,9 +9,7 @@ let managerCarts = new ManagerCarts();
 
 router.get("/:cid", async (req, res) => {
   let id = req.params.cid;
-
   let cart = await managerCarts.getCartById(id).populate("products"); 
-
   if (!cart) {
     res.send("No se encontró el carrito");
     return;
@@ -28,12 +26,11 @@ router.get("/", async (req, res) => {
     return;
   }
 
-  res.send(carts);
+  res.render('home', {carts});
 });
 
 router.post("/", async (req, res) => {
   await managerCarts.createCart();
-
   res.send({ status: "success" });
 });
 
@@ -42,7 +39,6 @@ router.post("/:cid/product/:pid", async (req, res) => {
   let productId = req.params.pid;
 
   await managerCarts.addProductToCart(cartId, productId);
-
   res.send({ status: "success" });
 });
 
@@ -51,7 +47,6 @@ router.delete("/:cid/product/:pid", async (req, res) => {
   let productId = req.params.pid;
 
   await managerCarts.deleteProductFromCart(cartId, productId);
-
   res.send({ status: "success" });
 });
 
@@ -60,7 +55,6 @@ router.put("/:cid", async (req, res) => {
   let products = req.body.products;
 
   await managerCarts.updateCart(cartId, products);
-
   res.send({ status: "success" });
 });
 
@@ -70,7 +64,6 @@ router.put("/:cid/products/:pid", async (req, res) => {
   let quantity = req.body.quantity;
 
   await managerCarts.updateProductQuantity(cartId, productId, quantity);
-
   res.send({ status: "success" });
 });
 

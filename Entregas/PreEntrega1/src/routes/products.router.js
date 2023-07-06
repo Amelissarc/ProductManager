@@ -21,7 +21,8 @@ router.get('/', async (req, res) => {
       filtro, 
       filtroValor
     );
-    res.send({ products });
+    console.log(products.docs)
+    res.render('home', {products});
   } catch (error) {
     console.log('Error al obtener todos los productos:', error);
     res.status(500).send('Error al obtener todos los productos');

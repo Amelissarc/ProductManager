@@ -6,5 +6,14 @@
     <p> Description: {{this.description}} </p>
     <p> Stock: {{this.stock}} </p>
     <p> Price: {{this.price}} </p>
+
+    <input id="{{this._id}}" type="number"></input> 
+    <button  onclick="alert2("{{this.stock}}", "{{this.id}}")">AGREGAR AL CARRITO </button>
   </div>
 {{/each}}
+
+<a href={{prev}}>PREVIO</a> 
+<a href={{next}}>NEXT</a>  
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="../public/index.js"></script>
