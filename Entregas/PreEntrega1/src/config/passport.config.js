@@ -1,8 +1,8 @@
 import passport from 'passport';
 import GithubStrategy from 'passport-github2';
-import userModel from '../models/Users.model.js';
+import userModel from '../daos/mongodb/models/Users.models.js';
 
-export const initializePassport = () => {
+const initializePassport = () => {
     passport.use(
         'github', 
         new GithubStrategy({
@@ -36,3 +36,5 @@ export const initializePassport = () => {
     done(null, user);
   });
 };
+
+export { initializePassport };
