@@ -6,28 +6,27 @@ const router = Router();
 
 let managerProducts = new ManagerProducts();
 
-router.get('/', async (req, res) => {
-  try {
-    let limit = Number(req.query.limit);
-    let page = Number(req.query.page);
-    let sort = Number(req.query.sort);
-    let filtro = req.query.filtro;
-    let filtroValor = req.query.filtroValor;
-
-    const products = await managerProducts.getProducts(
-      limit, 
-      page, 
-      sort, 
-      filtro, 
-      filtroValor
-    );
-    console.log(products.docs)
-    res.render('home', {products});
-  } catch (error) {
-    console.log('Error al obtener todos los productos:', error);
-    res.status(500).send('Error al obtener todos los productos');
+router.get("/", async (req, res) => {
+  let limit = Number(req.query.limit);
+  let page = Number(req.query.page);
+  let sort = Number(req.query.sort);
+  let filtro = req.query.filtro;
+  let filtroVal = req.query.filtroVal;
+  if (!limit) {
+      limit = 9;
   }
+
+  const product = await managerProducts.getProducts(
+      limit,
+      page,
+      sort,
+      filtro,
+      filtroVal
+  );
+
+  res.send({ product });
 });
+
 
 // Obtener producto por ID
 router.get("/:pid", async (req, res) => {
