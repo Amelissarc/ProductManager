@@ -1,5 +1,7 @@
 import { Router } from "express";
-import userModel from "../models/Users.model.js";
+import userModel from "../daos/mongodb/models/Users.models.js";
+import passport from 'passport';
+
 
 const router = Router();
 

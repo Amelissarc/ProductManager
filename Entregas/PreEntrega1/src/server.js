@@ -7,8 +7,12 @@ import routerCart from './routes/carts.router.js';
 import routerViews from './routes/views.router.js';
 import __dirname from './utils.js'
 import ManagerProducts from './daos/mongodb/ProductsManager.class.js';
-import { intializePassport } from './config/passport.config.js';
+import { initializePassport } from './config/passport.config.js';
 import passport from "passport";
+import mongoose from 'mongoose';
+import session from 'express-session';
+import sessionsRouter from './routes/session.router.js'; 
+
 
 const app = express();
 const managerProducts = new ManagerProducts();
@@ -22,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 // static
 app.use(express.static(__dirname + "/public"));
 
-intializePassport()
+initializePassport()
 app.use(
   session({
     store: new MongoStore({
